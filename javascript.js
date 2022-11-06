@@ -21,8 +21,11 @@ const Gameboard = (() => {
         return gameboard[index];
     }
 
+    const getBoard = () => {
+        return gameboard;
+    }
        
-    return{setField, getField, gameboard}
+    return{setField, getField, getBoard}
 
 })();
 
@@ -41,6 +44,7 @@ const playGame = (() => {
         }
         sign = currentPlayer.getSign();
         Gameboard.setField(index, sign);
+        checkWinner();
         switchPlayer();
         
         round++;
@@ -57,10 +61,27 @@ const playGame = (() => {
         }
     }
 
-    const checkWin = () => {
-        
+     // winning conditions
+     const winningCombinations = [
+        [0,1,2],
+        [3,4,5],
+        [6,7,8],
+        [0,3,6],
+        [1,4,7],
+        [2,5,8],
+        [0,4,8],
+        [2,4,6],
+    ];
+
+    function checkWinner() {
+        winningCombinations.forEach((combination) => { // checks each possibility for the current player to see if their signs matches with the possible combinations
+            if (Gameboard.getBoard()[combination[0]] == sign && Gameboard.getBoard()[combination[1]] == sign && Gameboard.getBoard()[combination[2]] == sign) {
+                console.log('winner!');
+            } 
+        })
     }
     return{playRound, currentPlayer};
+
 })();
 
 const displayGame = (() => {
