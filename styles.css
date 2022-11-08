@@ -27,7 +27,7 @@
     align-items: center;
 }
 
-.message{
+.end{
     display: none;
     position: fixed;
     top: 50%;
@@ -37,4 +37,14 @@
     border: 1px solid red;
     background-color: #eee;    
     padding: 25px 50px;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.scores{
+    display: flex;
+    justify-content: space-around;
+    font-size: 32px;
+    
 }
