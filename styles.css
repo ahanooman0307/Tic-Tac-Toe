@@ -20,4 +20,21 @@
 .item{
     border: 1px solid black;
     padding: 100px;
+    font-size: 32px;
+    color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.message{
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    border: 1px solid red;
+    background-color: #eee;    
+    padding: 25px 50px;
 }

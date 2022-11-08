@@ -36,21 +36,26 @@ const playGame = (() => {
     let round = 0;
     let currentPlayer;
     let sign;
+    let gameOver = false;
 
     const playRound = (index) => {
-        if(round == 9 || Gameboard.getField(index) != '') return;
+        if(round == 9 || Gameboard.getField(index) != '' || gameOver == true) return;
         if(round == 0){
             currentPlayer = player1;
+            
         }
         sign = currentPlayer.getSign();
         Gameboard.setField(index, sign);
+        round = round + 1;
         checkWinner();
         switchPlayer();
         
-        round++;
+       
 
 
     }
+
+    
 
     const switchPlayer = () => {
         if(currentPlayer == player1){
@@ -73,12 +78,41 @@ const playGame = (() => {
         [2,4,6],
     ];
 
+    const displayWin = () => {
+        const endMessage = document.querySelector(".message");
+        if(currentPlayer == player2){
+            endMessage.textContent = "You Lose!";
+        }
+       
+        
+        endMessage.style.display = "block";
+    }
+
     function checkWinner() {
+        const endMessage = document.querySelector(".message");
         winningCombinations.forEach((combination) => { // checks each possibility for the current player to see if their signs matches with the possible combinations
             if (Gameboard.getBoard()[combination[0]] == sign && Gameboard.getBoard()[combination[1]] == sign && Gameboard.getBoard()[combination[2]] == sign) {
                 console.log('winner!');
+            
+                
+                gameOver = true;
+                console.log(`game finished: ${gameOver}`);
+                console.log(`round: ${round}`);
+            
+                displayWin();
+                return;
             } 
+            
+                
+                
+            
         })
+        if(round == 9 && gameOver == false){
+            console.log(gameOver);
+            console.log("rannnn");
+            endMessage.textContent = "It's a Draw!";
+            displayWin();
+        }
     }
     return{playRound, currentPlayer};
 
