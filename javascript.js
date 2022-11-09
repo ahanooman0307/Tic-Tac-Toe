@@ -37,7 +37,8 @@ const Gameboard = (() => {
 const playGame = (() => {
     const user1 = document.querySelector('.user1');
     const user2 = document.querySelector('.user2');
-
+    const game = document.querySelector('.game');
+    let computer = false;
     const player1 = player('X');
     const player2 = player('O');
     let round = 0; //keeps count of current round
@@ -133,6 +134,19 @@ const playGame = (() => {
         }
     }
 
+    const computerOption = document.querySelector(".computer");
+
+    computerOption.addEventListener('click', () => {
+
+        const welcome = document.querySelector(".welcome");
+        computer = true;
+        welcome.style.display = "none";
+        game.style.display = "block";
+
+
+
+    })
+
     //function to reset the game
     const resetGame = () => {
         const endPopUp = document.querySelector(".end");
@@ -151,6 +165,7 @@ const displayGame = (() => {
     const boxes = document.querySelectorAll(".item");
     const reset = document.querySelector(".reset");
 
+
     boxes.forEach((box) => {
         box.addEventListener('click', (e) => {
             if(e.target.textContent != '') return;
@@ -166,6 +181,7 @@ const displayGame = (() => {
         playGame.resetGame();
         updateGameBoard();
     })
+
 
     const updateGameBoard = () => {
         for (let i = 0; i < boxes.length; i++) {
