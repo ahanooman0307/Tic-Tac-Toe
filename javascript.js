@@ -161,13 +161,15 @@ const playGame = (() => {
 const displayGame = (() => {
     const boxes = document.querySelectorAll(".item");
     const reset = document.querySelector(".reset");
+    const normalOption = document.querySelector(".normal");
+    const hardOption = document.querySelector(".hard"); 
     const game = document.querySelector('.game');
     const computerOption = document.querySelector(".computer");
     const playerOption = document.querySelector(".players");
     let computer = false;
     let cornerFirst = false;
     let normal = false;
-    let hard = true;
+    let hard = false;
 
 
     boxes.forEach((box) => {
@@ -448,9 +450,11 @@ const displayGame = (() => {
 
     computerOption.addEventListener('click', () => {
         const welcome = document.querySelector(".welcome");
+        const choice = document.querySelector(".difficulty");
         computer = true;
         welcome.style.display = "none";
-        game.style.display = "block";
+        choice.style.display = "flex";
+
 
     });
 
@@ -459,13 +463,31 @@ const displayGame = (() => {
         computer = false;
         welcome.style.display = "none";
         game.style.display = "block";
+
     })
 
     reset.addEventListener('click', () => {
         Gameboard.resetGame();
         playGame.resetGame();
         updateGameBoard();
-    })
+    });
+    normalOption.addEventListener('click', () =>{
+        const choice = document.querySelector(".difficulty");
+        normal = true;
+        hard = false;
+        choice.style.display = "none";
+        game.style.display = "block";
+
+    });
+    hardOption.addEventListener('click', () =>{
+        const choice = document.querySelector(".difficulty");
+        normal = false;
+        hard = true;
+        choice.style.display = "none";
+        game.style.display = "block";
+
+    });
+
 
 
     const updateGameBoard = () => {
