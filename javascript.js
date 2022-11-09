@@ -37,8 +37,7 @@ const Gameboard = (() => {
 const playGame = (() => {
     const user1 = document.querySelector('.user1');
     const user2 = document.querySelector('.user2');
-    const game = document.querySelector('.game');
-    let computer = false;
+   
     const player1 = player('X');
     const player2 = player('O');
     let round = 0; //keeps count of current round
@@ -131,21 +130,11 @@ const playGame = (() => {
             console.log(gameOver);
             endMessage.textContent = "It's a Draw!";
             displayWin();
+            gameOver = true;
         }
     }
 
-    const computerOption = document.querySelector(".computer");
 
-    computerOption.addEventListener('click', () => {
-
-        const welcome = document.querySelector(".welcome");
-        computer = true;
-        welcome.style.display = "none";
-        game.style.display = "block";
-
-
-
-    })
 
     //function to reset the game
     const resetGame = () => {
@@ -156,14 +145,29 @@ const playGame = (() => {
         endPopUp.style.display = "none";
     }
 
+    const getGameOver = () => {
+        return gameOver;
+    }
+
+    const getRound = () => {
+        return round;
+    }
+
     
-    return{playRound, resetGame};
+    return{playRound, resetGame, getGameOver, getRound};
 
 })();
 
 const displayGame = (() => {
     const boxes = document.querySelectorAll(".item");
     const reset = document.querySelector(".reset");
+    const game = document.querySelector('.game');
+    const computerOption = document.querySelector(".computer");
+    const playerOption = document.querySelector(".players");
+    let computer = false;
+    let cornerFirst = false;
+    let normal = false;
+    let hard = true;
 
 
     boxes.forEach((box) => {
@@ -173,8 +177,289 @@ const displayGame = (() => {
             playGame.playRound(parseInt(e.target.dataset.index));
             console.log(e.target.dataset.index);
             updateGameBoard();
-        })
+            console.log(playGame.getRound());
+        
+            if(normal == true){
+                randomMove();
+            }
+            if(hard == true){
+                hardMode();
+            }
+            if(playGame.getGameOver() == true){
+                cornerFirst = false;
+            }
+
+        });
     });
+    const hardMode = (() => {
+        if(computer == true && playGame.getGameOver() == false){
+
+            //first move
+            if(playGame.getRound() == 1){
+                if(((Gameboard.getField(0) == 'X') || Gameboard.getField(2) == 'X' || Gameboard.getField(6) == 'X' || Gameboard.getField(8) == 'X')){
+                    playGame.playRound(4);
+                    updateGameBoard();
+                    cornerFirst = true;
+                 }
+                 if(((Gameboard.getField(4) == 'X')) || (Gameboard.getField(1) == 'X') || (Gameboard.getField(3) == 'X')){
+                     playGame.playRound(0);
+                     updateGameBoard();
+                 }
+                 if((Gameboard.getField(5) == 'X') ){
+                     playGame.playRound(2);
+                     updateGameBoard();
+                 }
+                 if((Gameboard.getField(7) == 'X') ){
+                     playGame.playRound(1);
+                     updateGameBoard();
+                 }
+            }
+ 
+
+            if(playGame.getRound() == 3 && cornerFirst == true){
+                console.log("cheeeese");
+                if(((Gameboard.getField(0) == 'X') && (Gameboard.getField(2) == 'X'))){
+                    playGame.playRound(1);
+                    updateGameBoard();
+
+                }
+                else if(((Gameboard.getField(0) == 'X') && (Gameboard.getField(6) == 'X'))){
+                    playGame.playRound(3);
+                    updateGameBoard();
+
+                }
+                else if(((Gameboard.getField(6) == 'X') && (Gameboard.getField(8) == 'X'))){
+                    playGame.playRound(7);
+                    updateGameBoard();
+
+                }
+                else if(((Gameboard.getField(2) == 'X') && (Gameboard.getField(8) == 'X'))){
+                    playGame.playRound(5);
+                    updateGameBoard();
+
+                }
+                else if(((Gameboard.getField(0) == 'X') && (Gameboard.getField(3) == 'X'))){
+                    playGame.playRound(6);
+                    updateGameBoard();
+
+                }
+                else if(((Gameboard.getField(0) == 'X') && (Gameboard.getField(1) == 'X'))){
+                    playGame.playRound(2);
+                    updateGameBoard();
+
+                }
+                else if(((Gameboard.getField(2) == 'X') && (Gameboard.getField(5) == 'X'))){
+                    playGame.playRound(8);
+                    updateGameBoard();
+
+                }
+                else if(((Gameboard.getField(6) == 'X') && (Gameboard.getField(7) == 'X'))){
+                    playGame.playRound(8);
+                    updateGameBoard();
+
+                }
+                else if(((Gameboard.getField(6) == 'X') && (Gameboard.getField(3) == 'X'))){
+                    playGame.playRound(0);
+                    updateGameBoard();
+
+                }
+                else if(((Gameboard.getField(8) == 'X') && (Gameboard.getField(5) == 'X'))){
+                    playGame.playRound(2);
+                    updateGameBoard();
+
+                }
+                else if(((Gameboard.getField(0) == 'X') && (Gameboard.getField(8) == 'X'))){
+                    playGame.playRound(1);
+                    updateGameBoard();
+
+                }
+                else if(((Gameboard.getField(6) == 'X') && (Gameboard.getField(2) == 'X'))){
+                    playGame.playRound(7);
+                    updateGameBoard();
+
+                }
+                else{
+                    randomMove();
+                }
+
+            }
+            if(((playGame.getRound() == 3) || (playGame.getRound() == 5) || playGame.getRound() == 7) && cornerFirst == false){
+                
+                    //code to make game hard
+                    if(((Gameboard.getField(4) == 'X') && (Gameboard.getField(1) == 'X') && (Gameboard.getField(7) == ''))){
+                        playGame.playRound(7);
+                        updateGameBoard();
+                    }
+                    else if(((Gameboard.getField(4) == 'O') && (Gameboard.getField(6) == 'O') && (Gameboard.getField(2) == ''))){
+                        playGame.playRound(2);
+                        updateGameBoard();
+                    }
+                    else if(((Gameboard.getField(4) == 'O') && (Gameboard.getField(2) == 'O') && (Gameboard.getField(6) == ''))){
+                        playGame.playRound(6);
+                        updateGameBoard();
+                    }
+                    else if(((Gameboard.getField(4) == 'O') && (Gameboard.getField(8) == 'O') && (Gameboard.getField(0) == ''))){
+                        playGame.playRound(0);
+                        updateGameBoard();
+                    }
+                    else if(((Gameboard.getField(4) == 'O') && (Gameboard.getField(0) == 'O') && (Gameboard.getField(8) == ''))){
+                        playGame.playRound(8);
+                        updateGameBoard();
+                    }
+                    else if(((Gameboard.getField(4) == 'O') && (Gameboard.getField(1) == 'O') && (Gameboard.getField(7) == ''))){
+                        playGame.playRound(7);
+                        updateGameBoard();
+                        console.log(7);
+                    }
+                    else if(((Gameboard.getField(4) == 'O') && (Gameboard.getField(3) == 'O') && (Gameboard.getField(5) == ''))){
+                        playGame.playRound(5);
+                        updateGameBoard();
+                        console.log(7);
+                    }
+                    if(((Gameboard.getField(4) == 'X') && (Gameboard.getField(3) == 'X') && (Gameboard.getField(5) == ''))){
+                        playGame.playRound(5);
+                        updateGameBoard();
+                    }
+                    if(((Gameboard.getField(4) == 'X') && (Gameboard.getField(5) == 'X') && (Gameboard.getField(3) == ''))){
+                        playGame.playRound(3);
+                        updateGameBoard();
+                    }
+                    if(((Gameboard.getField(4) == 'X') && (Gameboard.getField(7) == 'X') && (Gameboard.getField(1) == ''))){
+                        playGame.playRound(1);
+                        updateGameBoard();
+                    }
+                    if(((Gameboard.getField(4) == 'X') && (Gameboard.getField(2) == 'X') && (Gameboard.getField(6) == ''))){
+                        playGame.playRound(6);
+                        updateGameBoard();
+                    }
+                    if(((Gameboard.getField(4) == 'X') && (Gameboard.getField(6) == 'X') && (Gameboard.getField(2) == ''))){
+                        playGame.playRound(2);
+                        updateGameBoard();
+                    }
+                    if(((Gameboard.getField(4) == 'X') && (Gameboard.getField(0) == 'X') && (Gameboard.getField(8) == ''))){
+                        playGame.playRound(8);
+                        updateGameBoard();
+                    }
+                    if(((Gameboard.getField(4) == 'X') && (Gameboard.getField(8) == 'X') && (Gameboard.getField(0) == ''))){
+                        playGame.playRound(0);
+                        updateGameBoard();
+                    }
+                    if((((Gameboard.getField(3) == 'X') && (Gameboard.getField(5) == 'X')) && (Gameboard.getField(4) == ''))){
+                        console.log('middle');
+                        playGame.playRound(4);
+                        updateGameBoard();
+                    }
+                    if(((Gameboard.getField(1) == 'X') && (Gameboard.getField(7) == 'X') && (Gameboard.getField(4) == ''))){
+                        playGame.playRound(4);
+                        updateGameBoard();
+                    }
+                
+            }
+            if(playGame.getRound() == 5 && cornerFirst == true) {
+                if(((Gameboard.getField(0) == 'X') && (Gameboard.getField(1) == 'X') && (Gameboard.getField(2) == ''))){
+                    playGame.playRound(2);
+                    updateGameBoard();
+                }
+                else if(((Gameboard.getField(4) == 'O') && (Gameboard.getField(6) == 'O') && (Gameboard.getField(2) == ''))){
+                    playGame.playRound(2);
+                    updateGameBoard();
+                }
+                else if(((Gameboard.getField(4) == 'O') && (Gameboard.getField(2) == 'O') && (Gameboard.getField(6) == ''))){
+                    playGame.playRound(6);
+                    updateGameBoard();
+                }
+                else if(((Gameboard.getField(4) == 'O') && (Gameboard.getField(8) == 'O') && (Gameboard.getField(0) == ''))){
+                    playGame.playRound(0);
+                    updateGameBoard();
+                }
+                else if(((Gameboard.getField(4) == 'O') && (Gameboard.getField(0) == 'O') && (Gameboard.getField(8) == ''))){
+                    playGame.playRound(8);
+                    updateGameBoard();
+                }
+                else if(((Gameboard.getField(4) == 'O') && (Gameboard.getField(1) == 'O') && (Gameboard.getField(7) == ''))){
+                    playGame.playRound(7);
+                    updateGameBoard();
+                    console.log(7);
+                }
+                else if(((Gameboard.getField(4) == 'O') && (Gameboard.getField(3) == 'O') && (Gameboard.getField(5) == ''))){
+                    playGame.playRound(5);
+                    updateGameBoard();
+                    console.log(7);
+                }
+                else if(((Gameboard.getField(0) == 'X') && (Gameboard.getField(3) == 'X') && (Gameboard.getField(6) == ''))){
+                    playGame.playRound(6);
+                    updateGameBoard();
+                }
+                else if(((Gameboard.getField(2) == 'X') && (Gameboard.getField(5) == 'X') && (Gameboard.getField(8) == ''))){
+                    playGame.playRound(8);
+                    updateGameBoard();
+                }
+                else if(((Gameboard.getField(2) == 'X') && (Gameboard.getField(5) == 'X') && (Gameboard.getField(8) == ''))){
+                    playGame.playRound(8);
+                    updateGameBoard();
+                }
+                else if(((Gameboard.getField(8) == 'X') && (Gameboard.getField(7) == 'X') && (Gameboard.getField(6) == ''))){
+                    playGame.playRound(6);
+                    updateGameBoard();
+                }
+                else if(((Gameboard.getField(8) == 'X') && (Gameboard.getField(5) == 'X') && (Gameboard.getField(2) == ''))){
+                    playGame.playRound(2);
+                    updateGameBoard();
+                }
+                else if(((Gameboard.getField(6) == 'X') && (Gameboard.getField(3) == 'X') && (Gameboard.getField(0) == ''))){
+                    playGame.playRound(0);
+                    updateGameBoard();
+                }
+                else if(((Gameboard.getField(6) == 'X') && (Gameboard.getField(7) == 'X') && (Gameboard.getField(8) == ''))){
+                    playGame.playRound(8);
+                    updateGameBoard();
+                }
+          
+                else{
+                    randomMove();
+                }
+            }
+
+            //prevents missing cases from not playing 
+            if(playGame.getRound() == 3 || playGame.getRound() == 7 || playGame.getRound() == 5){
+                randomMove();
+                console.log("random move");
+            }            
+            console.log("computer turn");
+            
+        }
+    });
+    const randomMove = () => {
+        if(computer == true && playGame.getGameOver() == false){
+            let played = false;
+            while(played == false){
+                let random = Math.floor(Math.random() * 10);
+                if(Gameboard.getField(random) == ''){
+                    playGame.playRound(random);
+                    updateGameBoard();
+                    played = true;
+                }
+            }
+            
+            console.log("computer turn");
+        }
+    };
+
+
+    computerOption.addEventListener('click', () => {
+        const welcome = document.querySelector(".welcome");
+        computer = true;
+        welcome.style.display = "none";
+        game.style.display = "block";
+
+    });
+
+    playerOption.addEventListener('click', () => {
+        const welcome = document.querySelector(".welcome");
+        computer = false;
+        welcome.style.display = "none";
+        game.style.display = "block";
+    })
 
     reset.addEventListener('click', () => {
         Gameboard.resetGame();
